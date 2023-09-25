@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import NevBar from './Component/NevBar';
+import Amazon from './Component/amazon';
+import Cart from './Component/Cart';
 
 function App() {
+
+  const [show,setShow] = useState(true);
+  const [cart,setCart] = useState([]);
+
+  const handleClick = (item) => {
+    if (cart.indexOf(item) !== -1) return;
+    setCart([...cart, item]);
+  };
+
+  const handleChange = (item,d) =>{
+    const ind = cart.indexOf(item);
+    const arr = cart;
+    arr[ind].amount += d;
+
+    if(arr[ind].amount === 0) arr[ind].amount = 1;
+    setCart([...arr]);
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <NevBar setShow={setShow} />
+      {
+        show ? <Amazon handleClick={handleClick}/> : <Cart setCart={setCart} handleChange={handleChange} cart={cart} />
+      }
     </div>
   );
 }
